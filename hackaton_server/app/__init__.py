@@ -9,6 +9,6 @@ class HackApplication(FrontikApplication):
     def __init__(self, **settings):
         super(HackApplication, self).__init__(**settings)
 
-        engine = create_engine('sqlite:////home/ipetrova/projects/hackaton/db.db')
+        engine = create_engine('sqlite:///db.db')
         Session = sessionmaker(bind=engine)
         self.session = Session()
