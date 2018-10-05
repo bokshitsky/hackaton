@@ -6,3 +6,4 @@ class Page(frontik.handler.PageHandler):
         self.json.put({
             'text': 'Hello, world!'
         })
+
