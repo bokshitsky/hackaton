@@ -2,15 +2,15 @@
 
 
 {% block header %}
-    <span class="contact100-form-title">
+    <span class="main-form-title">
         Тут вопрос
     </span>
 {% endblock %}
 
 {% block content %}
-    <div class="container-contact100-form-btn">
+    <div class="container-main-form-btn">
         {% for answer in answers %}
-            <button type="submit" class="contact100-form-btn" name="current" value="answer.id">
+            <button type="submit" class="main-form-btn" name="current" value="{{ answer.id }}">
                 <span>
                     {{ answer.text }}
                 </span>

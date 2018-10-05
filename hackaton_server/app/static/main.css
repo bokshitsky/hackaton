@@ -1,20 +1,3 @@
-/*//////////////////////////////////////////////////////////////////
-[ FONT ]*/
-
-@font-face {
-    font-family: Raleway-SemiBold;
-    src: url('../fonts/raleway/Raleway-SemiBold.ttf');
-}
-
-@font-face {
-    font-family: Raleway-Bold;
-    src: url('../fonts/raleway/Raleway-Bold.ttf');
-}
-
-@font-face {
-    font-family: Raleway-Black;
-    src: url('../fonts/raleway/Raleway-Black.ttf');
-}
 
 /*//////////////////////////////////////////////////////////////////
 [ RESTYLE TAG ]*/
@@ -27,12 +10,11 @@
 
 body, html {
     height: 100%;
-    font-family: Raleway-SemiBold, sans-serif;
+    font-family: sans-serif;
 }
 
 /*---------------------------------------------*/
 a {
-    font-family: Raleway-SemiBold;
     font-size: 14px;
     line-height: 1.7;
     color: #666666;
@@ -57,7 +39,7 @@ h1, h2, h3, h4, h5, h6 {
 }
 
 p {
-    font-family: Raleway-SemiBold;
+
     font-size: 14px;
     line-height: 1.7;
     color: #666666;
@@ -186,25 +168,20 @@ iframe {
     justify-content: center;
     align-items: center;
     padding: 15px;
-    background: #d867c6;
-    background: -webkit-linear-gradient(45deg, #c77ff2, #e8519e);
-    background: -o-linear-gradient(45deg, #c77ff2, #e8519e);
-    background: -moz-linear-gradient(45deg, #c77ff2, #e8519e);
-    background: linear-gradient(45deg, #c77ff2, #e8519e);
+    background: #e6e3ee;
+    background: linear-gradient(45deg, #fbf7ff, #e6e3ee);
 
 }
 
 .wrap-contact100 {
-    width: 790px;
-    background: #fff;
+    width: 900px;
     border-radius: 2px;
-    padding: 55px 95px 68px 95px;
 }
 
 /*==================================================================
 [ Form ]*/
 
-.contact100-form {
+.main-form {
     width: 100%;
     display: -webkit-box;
     display: -webkit-flex;
@@ -215,10 +192,9 @@ iframe {
     justify-content: space-between;
 }
 
-.contact100-form-title {
+.main-form-title {
     width: 100%;
     display: block;
-    font-family: Raleway-Black;
     font-size: 30px;
     color: #333333;
     line-height: 1.2;
@@ -242,7 +218,6 @@ iframe {
 }
 
 .label-input100 {
-    font-family: Raleway-SemiBold;
     font-size: 13px;
     color: #555555;
     line-height: 1.5;
@@ -256,7 +231,6 @@ iframe {
     display: block;
     width: 100%;
     background: transparent;
-    font-family: Raleway-SemiBold;
     font-size: 18px;
     color: #333333;
     line-height: 1.2;
@@ -284,7 +258,7 @@ textarea.input100 {
     left: -1px;
     pointer-events: none;
     border: 1px solid;
-    border-color: #d867c6;
+    border-color: #e6e3ee;
     border-color: -webkit-linear-gradient(45deg, #c77ff2, #e8519e);
     border-color: -o-linear-gradient(45deg, #c77ff2, #e8519e);
     border-color: -moz-linear-gradient(45deg, #c77ff2, #e8519e);
@@ -318,7 +292,7 @@ textarea.input100 {
 
 /*------------------------------------------------------------------
 [ Button ]*/
-.container-contact100-form-btn {
+.container-main-form-btn {
     width: 100%;
     display: -webkit-box;
     display: -webkit-flex;
@@ -330,8 +304,7 @@ textarea.input100 {
     margin-top: -4px;
 }
 
-.contact100-form-btn {
-    font-family: Raleway-Bold;
+.main-form-btn {
     font-size: 16px;
     color: #fff;
     line-height: 1.2;
@@ -348,11 +321,7 @@ textarea.input100 {
     margin-left: 15px;
     height: 55px;
     border-radius: 27px;
-    background: #d867c6;
-    background: -webkit-linear-gradient(45deg, #c77ff2, #e8519e);
-    background: -o-linear-gradient(45deg, #c77ff2, #e8519e);
-    background: -moz-linear-gradient(45deg, #c77ff2, #e8519e);
-    background: linear-gradient(45deg, #c77ff2, #e8519e);
+    background: #e6e3ee;
     position: relative;
     z-index: 1;
 
@@ -362,7 +331,7 @@ textarea.input100 {
     transition: all 0.4s;
 }
 
-.contact100-form-btn::before {
+.main-form-btn::before {
     content: "";
     display: block;
     position: absolute;
@@ -380,18 +349,18 @@ textarea.input100 {
     transition: all 0.4s;
 }
 
-.contact100-form-btn:hover:before {
+.main-form-btn:hover:before {
     opacity: 0;
 }
 
-.contact100-form-btn i {
+.main-form-btn i {
     -webkit-transition: all 0.4s;
     -o-transition: all 0.4s;
     -moz-transition: all 0.4s;
     transition: all 0.4s;
 }
 
-.contact100-form-btn:hover i {
+.main-form-btn:hover i {
     -webkit-transform: translateX(10px);
     -moz-transform: translateX(10px);
     -ms-transform: translateX(10px);

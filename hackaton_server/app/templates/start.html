@@ -1,12 +1,18 @@
 {% extends "layout.html" %}
 
+
+{% block header %}
+    <span class="main-form-title">
+        Скажите своё имя и фамилию и мы начнем.
+    </span>
+{% endblock %}
+
 {% block content %}
-    <form role="form" method="post" id="reused_form">
-        {% for answer in answers %}
-{#            {% for answered_question_id in answered_question_ids %}#}
-{#                <input type="hidden" name="aq" value={{ answered_question_id }}>#}
-{#            {% endfor %}#}
-            <button type="submit" class="btn btn-lg btn-success" name="current" value="answer.id">{{ answer.text }}</button>
-        {% endfor %}
-    </form>
+    <div class="container-main-form-btn">
+        <button type="submit" class="main-form-btn">
+            <span>
+                НАЧАТЬ
+            </span>
+        </button>
+    </div>
 {% endblock %}
