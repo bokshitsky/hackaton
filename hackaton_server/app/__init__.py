@@ -14,13 +14,17 @@ from hackaton_server.app import pages
 
 class HackApplication(FrontikApplication):
     def __init__(self, **settings):
-        super(HackApplication, self).__init__(**settings)
+
+        new_settings = settings
+        new_settings.update({'tornado_settings': {'static_path': 'app/static'}})
+
+        super(HackApplication, self).__init__(**new_settings)
         engine = create_engine('sqlite:///db.db')
         Session = sessionmaker(bind=engine)
         self.session = Session()
 
     def application_urls(self):
         return [
-            ('/static/(.*)', tornado.web.StaticFileHandler, {'path': 'static'}),
+            ('/static/(.*)', tornado.web.StaticFileHandler),
             ('', FileMappingRouter(pages)),
         ]
