@@ -1,26 +1,22 @@
 create table profession (
-  id SERIAL,
-  name STRING,
-  primary key (id)
+  id integer primary key AUTOINCREMENT,
+  name STRING
 );
 
 create table question (
-  id SERIAL,
-  text STRING,
-  primary key (id)
+  id integer primary key AUTOINCREMENT,
+  text STRING
 );
 
 create table answer (
-  id SERIAL,
-  text STIRNG,
-  primary key (id)
+  id integer primary key AUTOINCREMENT,
+  text STIRNG
 );
 
 CREATE TABLE question_answer (
-  id SERIAL,
+  id integer primary key AUTOINCREMENT,
   answer_id integer,
   question_id integer,
-  primary key (id),
   foreign key (answer_id) references answer(id),
   foreign key (question_id) references question(id)
 );

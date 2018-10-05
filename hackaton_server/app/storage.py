@@ -17,3 +17,11 @@ class DbSnapshot(object):
 
         self.question_answer = {question_answer.question_id: (answer.text, question_answer.id)
                                 for question_answer, answer in session.query(QuestionAnswer, Answer).join(Answer)}
+
+
+def increment_counters(session, real_profession_id, proposed_profession_id, question_answer_id):
+    if real_profession_id == proposed_profession_id:
+
+        backer = RequestAnswer()
+        self.application.session.add(backer)
+        self.application.session.commit()
