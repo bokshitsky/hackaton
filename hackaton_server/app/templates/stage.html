@@ -1,5 +1,5 @@
 {% extends "layout.html" %}
-
+{% from "read_text.js" import read_text %}
 
 {% block header %}
     <span class="main-form-title">
@@ -17,4 +17,10 @@
             </button>
         {% endfor %}
     </div>
+{% endblock %}
+
+{% block javascript_code %}
+    <script>
+        {{ read_text(question.text) }}
+    </script>
 {% endblock %}
