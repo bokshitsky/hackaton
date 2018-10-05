@@ -1,3 +1,5 @@
+from typing import DefaultDict
+
 from app.model.tables import Profession, Answer, Question, QuestionAnswer, RequestAnswer, Request
 
 
@@ -11,13 +13,28 @@ class storage(object):
 class DbSnapshot(object):
 
     def __init__(self, session):
+        self.session = session
+
         self.professions = {profession.id: profession.name for profession in session.query(Profession)}
         self.answer = {answer.id: answer.text for answer in session.query(Answer)}
         self.question = {question.id: question.text for question in session.query(Question)}
 
-        self.session = session
+
+        self.question_answer_to_question_map = {question_answer.id: question_answer.question_id
+                                                for question_answer
+                                                in session.query(QuestionAnswer)}
+
+
+        self.question_to_answers = DefaultDict(list)
+        for question_answer, answer in session.query(QuestionAnswer, Answer).join(Answer):
+            self.question_to_answers[question_answer.question_id].append((question_answer.id, answer.id, answer.text))
+
+        self.question_to_question_answer_map = {question_answer.question_id: (question_answer.id, answer.text)
+                                                for question_answer, answer
+                                                in session.query(QuestionAnswer, Answer).join(Answer)}
+
         self.question_answer = {question_answer.question_id: (answer.text, question_answer.id)
-                                for question_answer, answer in session.query(QuestionAnswer, Answer).join(Answer)}
+                                for question_answer, answer in session.query(QuestionAnswer, Question).join(Answer)}
 
 
     def increment_request_answer_count(self, profession_id, question_answer_id):

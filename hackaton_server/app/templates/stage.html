@@ -3,14 +3,14 @@
 
 {% block header %}
     <span class="main-form-title">
-        Тут вопрос
+        {{ question.text }}
     </span>
 {% endblock %}
 
 {% block content %}
     <div class="container-main-form-btn">
         {% for answer in answers %}
-            <button type="submit" class="main-form-btn" name="current" value="{{ answer.id }}">
+            <button type="submit" class="main-form-btn" name="current" value="{{ answer.qa_id }}">
                 <span>
                     {{ answer.text }}
                 </span>
