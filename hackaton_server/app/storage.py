@@ -1,7 +1,4 @@
-from app.model.tables import Profession
-from app.model.tables import Answer
-from app.model.tables import Question
-from app.model.tables import QuestionAnswer
+from app.model.tables import Profession, Answer, Question, QuestionAnswer
 
 
 class storage(object):
