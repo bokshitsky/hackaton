@@ -18,6 +18,8 @@ class Page(frontik.handler.PageHandler):
             ]
         })
 
+        self.application.snapshot
+
         # professions_snapshot = storage.get_professions_snapshot()
         # for profession in professions_snapshot:
         #     for used_question_answer in used_question_answers:

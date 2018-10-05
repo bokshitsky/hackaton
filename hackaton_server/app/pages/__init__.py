@@ -12,6 +12,8 @@ class Page(frontik.handler.PageHandler):
 
         str = self.application.session.query(Profession).get(1).name
 
+        snapshot = DbSnapshot(self.application.session)
+
         self.json.put({
-            'text': 'Hello, world1! ' + str + ' ' + DbSnapshot.professions.get(1)
+            'text': 'Hello, world1! ' + str + ' ' + snapshot.professions.get(1)
         })
