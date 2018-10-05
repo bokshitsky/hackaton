@@ -1,5 +1,6 @@
 import frontik.handler
 from app.model.tables import Profession
+from app.storage import DbSnapshot
 
 
 class Page(frontik.handler.PageHandler):
@@ -8,10 +9,9 @@ class Page(frontik.handler.PageHandler):
         # self.application.session.add(backer)
         # self.application.session.commit()
 
+
         str = self.application.session.query(Profession).get(1).name
 
-
-
         self.json.put({
-            'text': 'Hello, world1! ' + str
+            'text': 'Hello, world1! ' + str + ' ' + DbSnapshot.professions.get(1)
         })

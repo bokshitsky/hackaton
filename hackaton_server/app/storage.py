@@ -1,4 +1,4 @@
-
+from app.model.tables import Profession
 
 
 class storage(object):
@@ -11,7 +11,8 @@ class storage(object):
 class DbSnapshot(object):
 
     def __init__(self):
-        professions = {}
+        session = self.application.session
+        self.professions = {profession.id: profession.name for profession in session.query(Profession)}
 
 
 
