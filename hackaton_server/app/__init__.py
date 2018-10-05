@@ -1,15 +1,14 @@
 # coding=utf-8
 
 from frontik.app import FrontikApplication
-import sqlalchemy
 from sqlalchemy import create_engine
-from sqlalchemy import Table, MetaData
+from sqlalchemy.orm import sessionmaker
 
 
 class HackApplication(FrontikApplication):
     def __init__(self, **settings):
         super(HackApplication, self).__init__(**settings)
 
-    met
-    engine = create_engine('sqlite:///db.db')
-    Table('profession')
+        engine = create_engine('sqlite:////home/ipetrova/projects/hackaton/db.db')
+        Session = sessionmaker(bind=engine)
+        self.session = Session()
