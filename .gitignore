@@ -102,3 +102,13 @@ venv.bak/
 
 # mypy
 .mypy_cache/
+
+.DS_Store
+.vscode
+*.pyc
+*.egg*
+*.local.conf
+**/.idea
+*.crt
+*.log
+**/*.iml
