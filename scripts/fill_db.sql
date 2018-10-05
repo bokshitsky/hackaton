@@ -8,3 +8,13 @@ insert into profession (name) values ('Клоун');
 insert into profession (name) values ('Учитель');
 insert into profession (name) values ('Сварщик');
 insert into profession (name) values ('Альпинист');
+
+insert into answer(text) values ('Да');
+insert into answer(text) values ('Нет');
+
+insert into question_answer(answer_id, question_id) values (1, 1);
+insert into question_answer(answer_id, question_id) values (1, 2);
+insert into question_answer(answer_id, question_id) values (2, 1);
+insert into question_answer(answer_id, question_id) values (2, 2);
+insert into question_answer(answer_id, question_id) values (3, 1);
+insert into question_answer(answer_id, question_id) values (3, 2);

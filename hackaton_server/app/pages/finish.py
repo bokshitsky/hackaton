@@ -7,3 +7,7 @@ class Page(frontik.handler.PageHandler):
             'text': 'Hello, world!'
         })
 
+        # для тестирвоания
+        self.application.snapshot.increment_counters(1, 0, 1)
+        self.application.snapshot.increment_counters(1, 1, 1)
+
