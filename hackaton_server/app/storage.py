@@ -24,7 +24,7 @@ class DbSnapshot(object):
         self.questions = dict()
         for q in session.query(Question):
             self.questions[q.id] = AttrDict(dict(question_id=q.id,
-                                                 question_name=q.text))
+                                                 question_text=q.text))
 
         self.question_to_question_answer_map = DefaultDict(list)
         self.question_answer_to_question_map = dict()
@@ -52,14 +52,14 @@ class DbSnapshot(object):
     def get_question_by_question_answer(self, question_answer_id):
         return self.question_answer_to_question_map[question_answer_id]
 
-    def get_question_answers_by_question(self, question_id):
+    def get_question_answers(self, question_id):
         return self.question_to_question_answer_map[question_id]
 
     def get_question_answer_total_requests(self, profession_id, question_answer_id):
         question_id = self.question_answer_to_question_map[question_answer_id]
         return self.professions_questions[profession_id].get(question_id, 0)
 
-    def get_question_answer_successfull_requests(self, profession_id, question_answer_id):
+    def get_question_answer_successful_requests(self, profession_id, question_answer_id):
         return self.professions_questions_answers[profession_id].get(question_answer_id, 0)
 
     def get_all_question_ids(self):
@@ -69,7 +69,7 @@ class DbSnapshot(object):
         return self.questions[question_id]
 
     def get_profession(self, profession_id):
-        return self.questions[profession_id]
+        return self.professions[profession_id]
 
     def increment_request_answer_count(self, profession_id, question_answer_id):
         request_answer = self.session.query(RequestAnswer).filter_by(profession_id=profession_id,
@@ -108,7 +108,3 @@ class DbSnapshot(object):
             self.increment_request_answer_count(real_profession_id, question_answer_id)
 
         self.session.commit()
-
-    def get_question_answers(self, quesion_id):
-
-        return AttrDict

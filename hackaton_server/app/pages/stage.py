@@ -13,15 +13,12 @@ class Page(HackatonPage):
 
         used_question_answers_ids = [int(qa) for qa in self.get_arguments('qa')]
 
-        remaining_questions = self.get_remaining_questions_ids(used_question_answers_ids)
-        next_question_id = random.sample(remaining_questions, 1)[0]
-        next_question_text = self.get_questions()[next_question_id]
-
-        next_question_answers = self.get_question_to_answers_map()[next_question_id]
+        next_question = self.get_next_question(used_question_answers_ids)
+        next_question_answers = self.get_storage().get_question_answers(next_question.question_id)
 
         self.json.put({
-            'question': {'text': next_question_text},
-            'answers': [{'qa_id': qa_id, 'id': id, 'text': text} for qa_id, id, text in next_question_answers]
+            'question': {'text': next_question.question_text},
+            'answers': [{'qa_id': nqa.question_answer_id, 'text': nqa.answer_text} for nqa in next_question_answers]
         })
 
         # professions_snapshot = storage.get_professions_snapshot()
@@ -40,15 +37,10 @@ class Page(HackatonPage):
         #     return self.redirect_to_finish()
         # self.redirect_to_next_stage()
 
-    def get_remaining_questions_ids(self, used_question_answers_ids):
-        storage = self.get_storage()
-
-        used_questions = set(
-            storage.get_question_by_question_answer(qa_id).question_id for qa_id in used_question_answers_ids
-        )
-        all_questions_ids = set(storage.get_all_question_ids())
-        remaining_questions = all_questions_ids.difference(used_questions)
-        return remaining_questions
+    def get_next_question(self, used_question_answers_ids):
+        remaining_questions = self.get_remaining_questions_ids(used_question_answers_ids)
+        next_question_id = random.sample(remaining_questions, 1)[0]
+        return self.get_storage().get_question(next_question_id)
 
     def post_page(self):
         used_question_answers = [int(qa) for qa in self.get_arguments('qa') + self.get_arguments('current')]
@@ -60,13 +52,21 @@ class Page(HackatonPage):
         # for profession in professions:
         #     for question_answer in used_question_answers:
 
-
-
         remaining_questions = self.get_remaining_questions_ids(used_question_answers)
         if not remaining_questions:
             self.redirect('/start')
 
         self.redirect_to_next_stage(used_question_answers)
+
+    def get_remaining_questions_ids(self, used_question_answers_ids):
+        storage = self.get_storage()
+
+        used_questions = set(
+            storage.get_question_by_question_answer(qa_id).question_id for qa_id in used_question_answers_ids
+        )
+        all_questions_ids = set(storage.get_all_question_ids())
+        remaining_questions = all_questions_ids.difference(used_questions)
+        return remaining_questions
 
     def redirect_to_next_stage(self, used_question_answers):
         next_stage_url = update_url('/stage', {'qa': used_question_answers})
