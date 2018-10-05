@@ -10,6 +10,5 @@ class HackApplication(FrontikApplication):
     def __init__(self, **settings):
         super(HackApplication, self).__init__(**settings)
 
-    met
+
     engine = create_engine('sqlite:///db.db')
-    Table('profession')
