@@ -1,11 +1,12 @@
 {% extends "layout.html" %}
 
 {% block content %}
-
     <form role="form" method="post" id="reused_form">
-        <button type="submit" class="btn btn-lg btn-success" name="current" value="x1">Post It! &rarr;
-        </button>
-        <button type="submit" class="btn btn-lg btn-success" name="current" value="x2">Post It! &rarr;
-        </button>
+        {% for answer in answers %}
+{#            {% for answered_question_id in answered_question_ids %}#}
+{#                <input type="hidden" name="aq" value={{ answered_question_id }}>#}
+{#            {% endfor %}#}
+            <button type="submit" class="btn btn-lg btn-success" name="current" value="answer.id">{{ answer.text }}</button>
+        {% endfor %}
     </form>
 {% endblock %}

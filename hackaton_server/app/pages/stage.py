@@ -7,9 +7,17 @@ import frontik.handler
 class Page(frontik.handler.PageHandler):
     def get_page(self):
         self.set_template('stage.html')
-        self.json.put({'text': '2222'})
-        # used_question_answers = self.get_arguments("aq")
-        #
+
+        used_question_answers = self.get_arguments("aq")
+        self.json.put({'answered_question_ids': used_question_answers})
+
+        self.json.put({
+            'answers': [
+                {'id': 1, 'text': 'Да'},
+                {'id': 2, 'text': 'Нет'}
+            ]
+        })
+
         # professions_snapshot = storage.get_professions_snapshot()
         # for profession in professions_snapshot:
         #     for used_question_answer in used_question_answers:
