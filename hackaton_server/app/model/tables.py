@@ -1,4 +1,4 @@
-from sqlalchemy import Column, Integer, String
+from sqlalchemy import Column, Integer, String, ForeignKey
 from sqlalchemy.ext.declarative import declarative_base
 
 Base = declarative_base()
@@ -28,8 +28,8 @@ class QuestionAnswer(Base):
     __tablename__ = 'question_answer'
 
     id = Column(Integer, primary_key=True)
-    answer_id = Column(Integer)
-    question_id = Column(Integer)
+    answer_id = Column(Integer, ForeignKey('answer.id'))
+    question_id = Column(Integer, ForeignKey('question.id'))
 
 
 class Request(Base):

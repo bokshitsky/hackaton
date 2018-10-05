@@ -1,6 +1,7 @@
 from app.model.tables import Profession
 from app.model.tables import Answer
 from app.model.tables import Question
+from app.model.tables import QuestionAnswer
 
 
 class storage(object):
@@ -17,5 +18,5 @@ class DbSnapshot(object):
         self.answer = {answer.id: answer.text for answer in session.query(Answer)}
         self.question = {question.id: question.text for question in session.query(Question)}
 
-
-
+        self.question_answer = {question_answer.question_id: (answer.text, question_answer.id)
+                                for question_answer, answer in session.query(QuestionAnswer, Answer).join(Answer)}
