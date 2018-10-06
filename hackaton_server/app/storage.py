@@ -56,8 +56,8 @@ class DbSnapshot(object):
         return [qa.get_copy() for qa in self.question_to_question_answer_map[question_id]]
 
     def get_question_answer_total_requests(self, profession_id, question_answer_id):
-        question_id = self.question_answer_to_question_map[question_answer_id]
-        return self.professions_questions[profession_id].get(question_id, 0)
+        question = self.question_answer_to_question_map[question_answer_id]
+        return self.professions_questions[profession_id].get(question.question_id, 0)
 
     def get_question_answer_successful_requests(self, profession_id, question_answer_id):
         return self.professions_questions_answers[profession_id].get(question_answer_id, 0)
