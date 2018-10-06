@@ -71,6 +71,9 @@ class DbSnapshot(object):
     def get_profession(self, profession_id):
         return self.professions[profession_id]
 
+    def get_professions(self):
+        return [p.get_copy() for p in self.professions.values()]
+
     def increment_request_answer_count(self, profession_id, question_answer_id):
         request_answer = self.session.query(RequestAnswer).filter_by(profession_id=profession_id,
                                                                      question_answer_id=question_answer_id).first()

@@ -43,20 +43,30 @@ class Page(HackatonPage):
         return self.get_storage().get_question(next_question_id)
 
     def post_page(self):
-        used_question_answers = [int(qa) for qa in self.get_arguments('qa') + self.get_arguments('current')]
+        last_selected_question_answer = self.get_argument('current')
+        used_question_answers_ids = [int(qa) for qa in (self.get_arguments('qa') + [last_selected_question_answer])]
 
-        # professions_ids = list(self.get_professions().keys())
-        # initial_probability = 1 / len(professions_ids)
-        # professions = [AttrDict(probability=initial_probability, id=p) for p in professions_ids]
-        #
-        # for profession in professions:
-        #     for question_answer in used_question_answers:
+        storage = self.get_storage()
 
-        remaining_questions = self.get_remaining_questions_ids(used_question_answers)
-        if not remaining_questions:
-            self.redirect('/start')
+        professions = random.shuffle(storage.get_professions())
+        # initial_probability = 1 / len(professions)
+        for profession in professions:
+            profession.probability = 1 # initial_probability
+            for question_answer in used_question_answers_ids:
+                total_requests = storage.get_question_answer_total_requests(profession.profession_id, question_answer) + 1 # +1 нужен для корректной обработки отсутствующих данных
+                successfull_requests = storage.get_question_answer_successful_requests(profession.profession_id, question_answer) + 1
+                profession.probability = profession.probability * successfull_requests / total_requests
 
-        self.redirect_to_next_stage(used_question_answers)
+        professions.sort(key=lambda p: p.probability, reverse=True)
+        total_weight = sum(p.probability for p in professions)
+        for profession in professions:
+            profession.probability = profession.probability / total_weight
+
+        remaining_questions = self.get_remaining_questions_ids(used_question_answers_ids)
+        if not remaining_questions or professions[0].probability > 0.8:
+            return self.redirect_to_finish(professions[0].profession_id, last_selected_question_answer, used_question_answers_ids)
+
+        self.redirect_to_next_stage(used_question_answers_ids)
 
     def get_remaining_questions_ids(self, used_question_answers_ids):
         storage = self.get_storage()
@@ -67,6 +77,14 @@ class Page(HackatonPage):
         all_questions_ids = set(storage.get_all_question_ids())
         remaining_questions = all_questions_ids.difference(used_questions)
         return remaining_questions
+
+    def redirect_to_finish(self, profession_id, last_question_answer_id, used_question_answers):
+        next_stage_url = update_url('/finish', {
+            'qa': used_question_answers,
+            'lqa': last_question_answer_id,
+            'p': profession_id
+        })
+        self.redirect(next_stage_url)
 
     def redirect_to_next_stage(self, used_question_answers):
         next_stage_url = update_url('/stage', {'qa': used_question_answers})
