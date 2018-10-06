@@ -1,7 +1,6 @@
 insert into question (text) values ('Вы работаете в офисе?');
 insert into question (text) values ('У Вас опасная профессия?');
 insert into question (text) values ('Вы часто бываете в командировках?');
-
 insert into question (text) values ('Вы любите готовить?');
 insert into question (text) values ('Вы общительный человек?');
 insert into question (text) values ('Как часто вы пользуетесь компьютером?');
@@ -31,7 +30,6 @@ insert into profession (name) values ('Клоун');
 insert into profession (name) values ('Учитель');
 insert into profession (name) values ('Сварщик');
 insert into profession (name) values ('Альпинист');
-
 insert into profession (name) values ('Сисадмин');
 insert into profession (name) values ('Продавец');
 insert into profession (name) values ('Формашлеп');
@@ -186,3 +184,16 @@ insert into question_answer(question_id, answer_id) values (25, 53);
 insert into question_answer(question_id, answer_id) values (25, 54);
 insert into question_answer(question_id, answer_id) values (25, 55);
 insert into question_answer(question_id, answer_id) values (9, 2);
+
+delete from profession where id = 2;
+delete from profession where id = 8;
+delete from profession where id = 10;
+delete from profession where id = 15;
+delete from profession where id = 5;
+
+delete from question where id = 21;
+delete from question where id = 19;
+delete from question where id = 12;
+delete from question where id = 13;
+delete from question where id = 14;
+delete from question where id = 11;
