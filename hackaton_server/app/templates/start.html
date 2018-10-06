@@ -2,14 +2,14 @@
 
 {% block header %}
     <span class="main-form-title">
-        Скажите своё имя и фамилию и мы начнем.
+        Скажите 'НАЧАТЬ' и мы начнем
     </span>
 {% endblock %}
 
 {% block content %}
     <form class="main-form" method="post" action="/stage">
         <div class="container-main-form-btn">
-            <button type="submit" class="main-form-btn">
+            <button type="submit" class="main-form-btn voice_button" voice_data="начнем|да|давай|поехали">
             <span>
                 НАЧАТЬ
             </span>
@@ -20,16 +20,15 @@
 
 {% block javascript_code %}
     <script>
-        speakText('Давайте начнем', 1500)
-            .then(function (value) { console.log('2222') });
+        speakText('{{ voice_message }}', 1500)
+            .then(function (value) {
+                listenVoice();
+            });
+        {#    .then(function (value) { console.log('2222') });#}
 
 
-        {#var recognition = new webkitSpeechRecognition();#}
-        {#recognition.continuous = true;#}
-        {#recognition.interimResults = true;#}
-        {##}
-        {#recognition.onstart = function() { ... }#}
-        {#recognition.onresult = function(event) { ... }#}
+
+
         {#recognition.onerror = function(event) { ... }#}
         {#recognition.onend = function() { ... }#}
 

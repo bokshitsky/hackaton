@@ -80,7 +80,7 @@ class Page(HackatonPage):
         for profession in professions:
             profession.probability = 1  # initial_probability
             for question_answer_id in used_question_answers_ids:
-                # +2 и +1 нужены для корректной обработки отсутствующих данных
+                # +2 и +1 нужны для корректной обработки отсутствующих данных
                 total_requests = self.get_total_requests(profession, question_answer_id)
                 successfull_requests = self.get_successful_requests(profession, question_answer_id)
                 profession.probability = profession.probability * successfull_requests / total_requests
