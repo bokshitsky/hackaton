@@ -16,11 +16,6 @@ class Page(HackatonPage):
             'answers': [{'qa_id': nqa.question_answer_id, 'text': nqa.answer_text} for nqa in next_question_answers]
         })
 
-    # def get_next_question(self, used_question_answers_ids):
-    #     remaining_questions = self.get_remaining_questions_ids(used_question_answers_ids)
-    #     next_question_id = random.sample(remaining_questions, 1)[0]
-    #     return self.storage.get_question(next_question_id)
-
     def post_page(self):
         last_selected_question_answer = self.get_argument('current', None)
         if last_selected_question_answer:

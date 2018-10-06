@@ -1,0 +1,31 @@
+{% extends "layout.html" %}
+{% from "read_text.js" import read_text %}
+
+{% block header %}
+    <span class="main-form-title">
+        Я думаю, вы <b>{{ profession_name }}</b>
+    </span>
+{% endblock %}
+
+{% block content %}
+    <form class="main-form" method="post" action="/stage">
+        <div class="container-main-form-btn">
+            <button type="submit" class="main-form-btn main-form-btn-success">
+            <span>
+                УГАДАЛ!
+            </span>
+            </button>
+            <button type="submit" class="main-form-btn">
+            <span>
+                NOPE
+            </span>
+            </button>
+        </div>
+    </form>
+{% endblock %}
+
+{% block javascript_code %}
+    <script>
+        {{ read_text('Скажите своё имя и фамилию и мы начнем.') }}
+    </script>
+{% endblock %}
