@@ -76,7 +76,7 @@ class Page(HackatonPage):
     def calculate_professions_probabilities(self, used_question_answers_ids):
         professions = self.storage.get_professions()
         random.shuffle(professions)
-        # initial_probability = 1 / len(professions)
+
         for profession in professions:
             profession.probability = 1  # initial_probability
             for question_answer_id in used_question_answers_ids:
