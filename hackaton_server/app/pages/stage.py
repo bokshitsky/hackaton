@@ -16,10 +16,10 @@ class Page(HackatonPage):
             'answers': [{'qa_id': nqa.question_answer_id, 'text': nqa.answer_text} for nqa in next_question_answers]
         })
 
-    def get_next_question(self, used_question_answers_ids):
-        remaining_questions = self.get_remaining_questions_ids(used_question_answers_ids)
-        next_question_id = random.sample(remaining_questions, 1)[0]
-        return self.storage.get_question(next_question_id)
+    # def get_next_question(self, used_question_answers_ids):
+    #     remaining_questions = self.get_remaining_questions_ids(used_question_answers_ids)
+    #     next_question_id = random.sample(remaining_questions, 1)[0]
+    #     return self.storage.get_question(next_question_id)
 
     def post_page(self):
         last_selected_question_answer = self.get_argument('current', None)
@@ -36,7 +36,11 @@ class Page(HackatonPage):
                                            last_selected_question_answer,
                                            used_question_answers_ids)
 
-        remaining_questions = (self.storage.get_question(question_id) for question_id in remaining_question_ids)
+        next_question = self.get_next_question(professions, remaining_question_ids)
+        self.redirect_to_next_stage(next_question, used_question_answers_ids)
+
+    def get_next_question(self, professions, remaining_question_ids):
+        remaining_questions = [self.storage.get_question(question_id) for question_id in remaining_question_ids]
         for question in remaining_questions:
             question.entropy = 0
             question_answers = self.storage.get_question_answers(question.question_id)
@@ -59,15 +63,12 @@ class Page(HackatonPage):
                     profession.probability = profession.probability * answer_probability_for_profession
                 self.rescale_professions_weight(professions_snapshot)
 
-                question.entropy += sum(profession.probability * math.log(profession.probability) for profession in professions_snapshot) * answer.probability
+                professions_entropy = sum(profession.probability * math.log(profession.probability) for profession in
+                                          professions_snapshot)
 
+                question.entropy += professions_entropy * answer.probability
 
-
-
-            pass
-
-
-        self.redirect_to_next_stage(used_question_answers_ids)
+        return min(remaining_questions, key=lambda question: question.entropy)
 
     def get_remaining_questions_ids(self, used_question_answers_ids):
         used_questions = set(
@@ -114,8 +115,6 @@ class Page(HackatonPage):
         })
         self.redirect(finish_url)
 
-    def redirect_to_next_stage(self, used_question_answers_ids):
-        next_question = self.get_next_question(used_question_answers_ids)
-
+    def redirect_to_next_stage(self, next_question, used_question_answers_ids):
         next_stage_url = update_url('/stage', {'qa': used_question_answers_ids, 'nq': next_question.question_id})
         self.redirect(next_stage_url)
