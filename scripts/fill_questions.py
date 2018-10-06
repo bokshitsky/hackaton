@@ -14,7 +14,7 @@ questions_common = [
     'Вы знаете много людей?',
     'Вы общительный?',
     'Вы работаете в цирке',
-    'Что вы рисуете?',
+    'Вы рисуете?',
     'Вы считаете деньги?',
     'Придумываете что-то новое?',
     'Вы работаете с документами?',
@@ -55,6 +55,13 @@ def insert_question_answer(question_id, answer_id, session):
     return qa
 
 
+def insert_question_with_answers(text, answers, session):
+    q = insert_question(text, session)
+    for answer in answers:
+        a = insert_answer(answer, session)
+        insert_question_answer(q.id, a.id, session)
+
+
 def main():
     engine = create_engine('sqlite:///../db.db')
     Session = sessionmaker(bind=engine)
@@ -66,6 +73,13 @@ def main():
             a = insert_answer(answer, session)
             insert_question_answer(q.id, a.id, session)
 
+    insert_custom(session)
+
+
+def insert_custom(session):
+    insert_question_with_answers('Какой язык предпочитаете?', ['java', 'python', 'perl', 'я русский'], session)
+    insert_question_with_answers('Что вы продаете?', ['Продукт', 'Себя', 'Не знаю', 'Ничего'], session)
+    insert_question_with_answers('Вы пишете фронтенд?', ['Да', 'К сожалению, да', 'Что это?'], session)
 
 if __name__ == '__main__':
     main()
