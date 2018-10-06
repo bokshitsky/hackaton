@@ -1,6 +1,8 @@
 import frontik.handler
+from app.handler import HackatonPage
 
-class Page(frontik.handler.PageHandler):
+
+class Page(HackatonPage):
     def get_page(self):
         self.set_template('start.html')
         self.json.put({

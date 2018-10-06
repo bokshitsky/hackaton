@@ -1,11 +1,14 @@
 import frontik.handler
 
+from app.handler import HackatonPage
 
-class Page(frontik.handler.PageHandler):
+
+class Page(HackatonPage):
     def get_page(self):
+        profession = self.storage.get_profession(int(self.get_argument('p')))
 
         self.json.put({
-            'text': 'Hello, world!'
+            'text': profession.profession_name
         })
 
         # # для тестирвоания

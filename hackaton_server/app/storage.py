@@ -53,7 +53,7 @@ class DbSnapshot(object):
         return self.question_answer_to_question_map[question_answer_id]
 
     def get_question_answers(self, question_id):
-        return self.question_to_question_answer_map[question_id]
+        return [qa.get_copy() for qa in self.question_to_question_answer_map[question_id]]
 
     def get_question_answer_total_requests(self, profession_id, question_answer_id):
         question_id = self.question_answer_to_question_map[question_answer_id]
@@ -66,10 +66,10 @@ class DbSnapshot(object):
         return list(self.question_to_question_answer_map.keys())
 
     def get_question(self, question_id):
-        return self.questions[question_id]
+        return self.questions[question_id].get_copy()
 
     def get_profession(self, profession_id):
-        return self.professions[profession_id]
+        return self.professions[profession_id].get_copy()
 
     def get_professions(self):
         return [p.get_copy() for p in self.professions.values()]

@@ -1,22 +1,16 @@
+import math
 import random
 
 from app.handler import HackatonPage
-
 from app.utils import update_url
-
 
 
 class Page(HackatonPage):
     def get_page(self):
         self.set_template('stage.html')
-
-        used_question_answers_ids = [int(qa) for qa in self.get_arguments('qa')]
-
         next_question_id = int(self.get_argument('nq'))
-        next_question = self.get_storage().get_question(next_question_id)
-
-        next_question_answers = self.get_storage().get_question_answers(next_question.question_id)
-
+        next_question = self.storage.get_question(next_question_id)
+        next_question_answers = self.storage.get_question_answers(next_question_id)
         self.json.put({
             'question': {'text': next_question.question_text},
             'answers': [{'qa_id': nqa.question_answer_id, 'text': nqa.answer_text} for nqa in next_question_answers]
@@ -25,7 +19,7 @@ class Page(HackatonPage):
     def get_next_question(self, used_question_answers_ids):
         remaining_questions = self.get_remaining_questions_ids(used_question_answers_ids)
         next_question_id = random.sample(remaining_questions, 1)[0]
-        return self.get_storage().get_question(next_question_id)
+        return self.storage.get_question(next_question_id)
 
     def post_page(self):
         last_selected_question_answer = self.get_argument('current', None)
@@ -34,46 +28,91 @@ class Page(HackatonPage):
         else:
             used_question_answers_ids = []
 
-        storage = self.get_storage()
+        professions = self.calculate_professions_probabilities(used_question_answers_ids)
+        remaining_question_ids = self.get_remaining_questions_ids(used_question_answers_ids)
+        top_profession = professions[0]
+        if not remaining_question_ids or top_profession.probability > 0.8:
+            return self.redirect_to_finish(top_profession.profession_id,
+                                           last_selected_question_answer,
+                                           used_question_answers_ids)
 
-        professions = storage.get_professions()
-        random.shuffle(professions)
-        # initial_probability = 1 / len(professions)
-        for profession in professions:
-            profession.probability = 1 # initial_probability
-            for question_answer in used_question_answers_ids:
-                total_requests = storage.get_question_answer_total_requests(profession.profession_id, question_answer) + 2 # +2 нужен для корректной обработки отсутствующих данных
-                successfull_requests = storage.get_question_answer_successful_requests(profession.profession_id, question_answer) + 1
-                profession.probability = profession.probability * successfull_requests / total_requests
+        remaining_questions = (self.storage.get_question(question_id) for question_id in remaining_question_ids)
+        for question in remaining_questions:
+            question.entropy = 0
+            question_answers = self.storage.get_question_answers(question.question_id)
 
-        professions.sort(key=lambda p: p.probability, reverse=True)
-        total_weight = sum(p.probability for p in professions)
-        for profession in professions:
-            profession.probability = profession.probability / total_weight
+            for answer in question_answers:
+                answer.probability = 0
+                answer.probability_by_profession = {}
+                for profession in professions:
+                    question_answer_id = answer.question_answer_id
 
-        remaining_questions = self.get_remaining_questions_ids(used_question_answers_ids)
-        if not remaining_questions or professions[0].probability > 0.8:
-            return self.redirect_to_finish(professions[0].profession_id, last_selected_question_answer, used_question_answers_ids)
+                    total_requests = self.get_total_requests(profession, question_answer_id)
+                    successfull_requests = self.get_successful_requests(profession, question_answer_id)
+                    answer_probability_for_profession = successfull_requests / total_requests
+                    answer.probability += profession.probability * answer_probability_for_profession
+                    answer.probability_by_profession[profession.profession_id] = answer_probability_for_profession
+
+                professions_snapshot = [p.get_copy() for p in professions]
+                for profession in professions_snapshot:
+                    answer_probability_for_profession = answer.probability_by_profession[profession.profession_id]
+                    profession.probability = profession.probability * answer_probability_for_profession
+                self.rescale_professions_weight(professions_snapshot)
+
+                question.entropy += sum(profession.probability * math.log(profession.probability) for profession in professions_snapshot) * answer.probability
+
+
+
+
+            pass
+
 
         self.redirect_to_next_stage(used_question_answers_ids)
 
     def get_remaining_questions_ids(self, used_question_answers_ids):
-        storage = self.get_storage()
-
         used_questions = set(
-            storage.get_question_by_question_answer(qa_id).question_id for qa_id in used_question_answers_ids
+            self.storage.get_question_by_question_answer(qa_id).question_id for qa_id in used_question_answers_ids
         )
-        all_questions_ids = set(storage.get_all_question_ids())
+        all_questions_ids = set(self.storage.get_all_question_ids())
         remaining_questions = all_questions_ids.difference(used_questions)
         return remaining_questions
 
+    def calculate_professions_probabilities(self, used_question_answers_ids):
+        professions = self.storage.get_professions()
+        random.shuffle(professions)
+        # initial_probability = 1 / len(professions)
+        for profession in professions:
+            profession.probability = 1  # initial_probability
+            for question_answer_id in used_question_answers_ids:
+                # +2 и +1 нужены для корректной обработки отсутствующих данных
+                total_requests = self.get_total_requests(profession, question_answer_id)
+                successfull_requests = self.get_successful_requests(profession, question_answer_id)
+                profession.probability = profession.probability * successfull_requests / total_requests
+
+        self.rescale_professions_weight(professions)
+        professions.sort(key=lambda p: p.probability, reverse=True)
+        return professions
+
+    def get_successful_requests(self, profession, question_answer):
+        return self.storage.get_question_answer_successful_requests(profession.profession_id,
+                                                                    question_answer) + 1
+
+    def get_total_requests(self, profession, question_answer):
+        return self.storage.get_question_answer_total_requests(profession.profession_id,
+                                                               question_answer) + 2
+
+    def rescale_professions_weight(self, professions):
+        total_weight = sum(p.probability for p in professions)
+        for profession in professions:
+            profession.probability = profession.probability / total_weight
+
     def redirect_to_finish(self, profession_id, last_question_answer_id, used_question_answers):
-        next_stage_url = update_url('/finish', {
+        finish_url = update_url('/finish', {
             'qa': used_question_answers,
             'lqa': last_question_answer_id,
             'p': profession_id
         })
-        self.redirect(next_stage_url)
+        self.redirect(finish_url)
 
     def redirect_to_next_stage(self, used_question_answers_ids):
         next_question = self.get_next_question(used_question_answers_ids)

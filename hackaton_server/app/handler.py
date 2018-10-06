@@ -8,5 +8,6 @@ class HackatonPage(frontik.handler.PageHandler):
         self.set_header('Pragma', 'no-cache')
         self.set_header('Expires', '0')
 
-    def get_storage(self):
+    @property
+    def storage(self):
         return self.application.snapshot
