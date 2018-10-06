@@ -20,9 +20,11 @@ class Page(HackatonPage):
         used_question_answers_ids = [int(qa) for qa in self.get_arguments('qa')]
         if is_success:
             profession_id = int(self.get_argument('p'))
+            profession = self.storage.get_profession(int(self.get_argument('p')))
+
             for qa in used_question_answers_ids:
                 self.application.snapshot.increment_counters(profession_id, qa)
-            return self.redirect('/start')
+            return self.redirect(update_url('https://hh.ru/search/vacancy', {'text': profession.profession_name, 'area': 1}))
 
         choose_coorect_profession_url = update_url('/save_results', {'qa': used_question_answers_ids})
         self.redirect(choose_coorect_profession_url)
