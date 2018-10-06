@@ -13,6 +13,7 @@
             {% for question_answer_id in question_answer_ids %}
                 <input type="hidden" name="qa" value="{{ question_answer_id }}">
             {% endfor %}
+            <input type="hidden" name="p" value="{{ profession_id }}">
             <button type="submit" class="main-form-btn main-form-btn-success" name="result" value="success">
             <span>
                 УГАДАЛ!

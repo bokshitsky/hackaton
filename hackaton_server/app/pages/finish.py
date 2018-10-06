@@ -10,10 +10,6 @@ class Page(HackatonPage):
 
         self.json.put({
             'profession_name': profession.profession_name,
+            'profession_id': profession.profession_id,
             'question_answer_ids': self.get_arguments('qa')
         })
-
-        # # для тестирвоания
-        # self.application.snapshot.increment_counters(1, 0, 1)
-        # self.application.snapshot.increment_counters(1, 1, 1)
-
