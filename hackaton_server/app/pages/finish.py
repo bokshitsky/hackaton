@@ -9,7 +9,8 @@ class Page(HackatonPage):
         profession = self.storage.get_profession(int(self.get_argument('p')))
 
         self.json.put({
-            'profession_name': profession.profession_name
+            'profession_name': profession.profession_name,
+            'question_answer_ids': self.get_arguments('qa')
         })
 
         # # для тестирвоания

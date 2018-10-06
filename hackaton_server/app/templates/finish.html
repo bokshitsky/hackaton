@@ -8,14 +8,17 @@
 {% endblock %}
 
 {% block content %}
-    <form class="main-form" method="post" action="/save_resut">
+    <form class="main-form" method="post" action="/save_results">
         <div class="container-main-form-btn">
+            {% for question_answer_id in question_answer_ids %}
+                <input type="hidden" name="qa" value="{{ question_answer_id }}">
+            {% endfor %}
             <button type="submit" class="main-form-btn main-form-btn-success" name="result" value="success">
             <span>
                 УГАДАЛ!
             </span>
             </button>
-            <button type="submit" class="main-form-btn" name="result" value="success">
+            <button type="submit" class="main-form-btn" name="result" value="fail">
             <span>
                 NOPE
             </span>
@@ -26,6 +29,6 @@
 
 {% block javascript_code %}
     <script>
-        {{ read_text('Скажите своё имя и фамилию и мы начнем.') }}
+
     </script>
 {% endblock %}

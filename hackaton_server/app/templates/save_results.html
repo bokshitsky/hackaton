@@ -8,24 +8,16 @@
 {% endblock %}
 
 {% block content %}
-    <form class="main-form" method="post" action="/save_resut">
-        <div class="container-main-form-btn">
-            <button type="submit" class="main-form-btn main-form-btn-success" name="result" value="success">
-            <span>
-                УГАДАЛ!
-            </span>
-            </button>
-            <button type="submit" class="main-form-btn" name="result" value="success">
-            <span>
-                NOPE
-            </span>
-            </button>
+    <form class="main-form" method="post" action="/save_results">
+        <div class="container-main-form-results-btn">
+            <input type="hidden" name="result" value="success">
+            {% for profession in professions %}
+                <button type="submit" class="main-form-btn main-form-btn-success" name="p" value="{{ profession.profession_id }}">
+                    <span>
+                        {{ profession.profession_name }}
+                    </span>
+                </button>
+            {% endfor %}
         </div>
     </form>
-{% endblock %}
-
-{% block javascript_code %}
-    <script>
-        {{ read_text('Скажите своё имя и фамилию и мы начнем.') }}
-    </script>
 {% endblock %}

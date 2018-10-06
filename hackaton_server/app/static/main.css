@@ -106,6 +106,17 @@ button {
     margin-top: -4px;
 }
 
+.container-main-form-results-btn {
+    width: 100%;
+    display: -webkit-box;
+    display: -webkit-flex;
+    display: -moz-box;
+    display: -ms-flexbox;
+    display: flex;
+    flex-wrap: wrap;
+    margin-top: -4px;
+}
+
 .main-form-btn {
     font-size: 16px;
     color: #fff;
@@ -126,6 +137,7 @@ button {
     background: #e6e3ee;
     position: relative;
     z-index: 1;
+    margin-top: 10px;
 
     -webkit-transition: all 0.4s;
     -o-transition: all 0.4s;
