@@ -96,18 +96,10 @@ class DbSnapshot(object):
     # real_profession_id - настоящая профессия пользователя
     # proposed_profession_id - профессия, которую предположил наш алгоритм
     #
-    def increment_counters(self, real_profession_id, proposed_profession_id, question_answer_id):
+    def increment_counters(self, real_profession_id, question_answer_id):
         question_answer = self.session.query(QuestionAnswer).get(question_answer_id)
 
-        self.increment_request_count(proposed_profession_id, question_answer)
-
-        # инкрементим только, если угадали
-        if real_profession_id == proposed_profession_id:
-            self.increment_request_answer_count(proposed_profession_id, question_answer_id)
-        else:
-            # если не угадали, сохраняем еще правильные ответы для профессии, которую указал пользователь,
-            # чтобы обучаться
-            self.increment_request_count(real_profession_id, question_answer)
-            self.increment_request_answer_count(real_profession_id, question_answer_id)
+        self.increment_request_count(real_profession_id, question_answer)
+        self.increment_request_answer_count(real_profession_id, question_answer_id)
 
         self.session.commit()

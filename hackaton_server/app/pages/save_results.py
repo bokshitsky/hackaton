@@ -8,11 +8,7 @@ class Page(HackatonPage):
         self.set_template('finish.html')
         profession = self.storage.get_profession(int(self.get_argument('p')))
 
-        self.json.put({
-            'profession_name': profession.profession_name
-        })
+        used_question_answers_ids = [int(qa) for qa in self.get_arguments('qa')]
 
-        # # для тестирвоания
-        # self.application.snapshot.increment_counters(1, 0, 1)
-        # self.application.snapshot.increment_counters(1, 1, 1)
-
+        for qa in used_question_answers_ids:
+            self.application.snapshot.increment_counters(qa, profession)
