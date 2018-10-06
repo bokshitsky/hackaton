@@ -5,7 +5,6 @@ function speakText(text, wait_time) {
         var msg = new SpeechSynthesisUtterance(text);
         var voices = window.speechSynthesis.getVoices();
         msg.lang = 'ru-RU';
-        msg.pitch = 1;
         msg.voice = voices[window.default_voice_id];
         speechSynthesis.speak(msg);
 
@@ -30,8 +29,16 @@ function listenVoice() {
         var matchingString = button.getAttribute('voice_data');
         var matchers = matchingString.toLowerCase().split('|');
         for (var i = 0; i < matchers.length; i++) {
+            var matchString = matchers[i];
+            matchString = matchString.replace(/\)/g,"");
+            matchString = matchString.replace(/\(/g,"");
+            matchString = matchString.replace(/\./g,"");
+            matchString = matchString.replace(/\!/g,"");
+            matchString = matchString.replace(/\:/g,"");
+            matchString = matchString.replace(/ {1,}/g," ");
+
             textToButton.push({
-                matchString: matchers[i],
+                matchString: matchString,
                 button: button
             })
         }
@@ -39,8 +46,6 @@ function listenVoice() {
     textToButton.sort(function (a, b) {
         return b.matchString.length - a.matchString.length
     });
-
-    console.log(textToButton);
 
     var recognition = new webkitSpeechRecognition();
     recognition.continuous = true;
@@ -51,12 +56,11 @@ function listenVoice() {
     recognition.onresult = function (event) {
         var speachstate = '';
         for (var i = event.resultIndex; i < event.results.length; ++i) {
-            if (event.results[i].isFinal) {
-                speachstate += event.results[i][0].transcript;
-            }
+            speachstate += event.results[i][0].transcript;
         }
 
         var speachstateLower = speachstate.toLowerCase();
+        console.log(speachstate);
         for (var i = 0; i < textToButton.length; i++) {
             if (speachstateLower.indexOf(textToButton[i].matchString) != -1) {
                 textToButton[i].button.click()
