@@ -1,5 +1,7 @@
 import frontik
 
+from app.storage import DbSnapshot
+
 
 class HackatonPage(frontik.handler.PageHandler):
 
@@ -11,3 +13,6 @@ class HackatonPage(frontik.handler.PageHandler):
     @property
     def storage(self):
         return self.application.snapshot
+
+    def reload_storage(self):
+        self.application.snapshot = DbSnapshot(self.application.session)

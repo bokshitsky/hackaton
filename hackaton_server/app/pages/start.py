@@ -6,6 +6,7 @@ from app.handler import HackatonPage
 
 class Page(HackatonPage):
     def get_page(self):
+        self.reload_storage()
         voice_message = random.sample(['Начнем?', 'Давайте начнем', 'Начинай уже'], 1)[0]
         self.set_template('start.html')
         self.json.put({
