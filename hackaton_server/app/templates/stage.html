@@ -8,6 +8,7 @@
 {% endblock %}
 
 {% block content %}
+    <form class="main-form" method="post">
     <div class="container-main-form-btn">
         {% for answer in answers %}
             <button type="submit" class="main-form-btn" name="current" value="{{ answer.qa_id }}">
@@ -17,6 +18,7 @@
             </button>
         {% endfor %}
     </div>
+    </form>
 {% endblock %}
 
 {% block javascript_code %}
