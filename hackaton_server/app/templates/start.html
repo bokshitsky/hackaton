@@ -20,7 +20,7 @@
 
 {% block javascript_code %}
     <script>
-        speakText('{{ voice_message }}', 1500)
+        speakText('{{ voice_message }}', 2500)
             .then(function (value) {
                 listenVoice();
             });

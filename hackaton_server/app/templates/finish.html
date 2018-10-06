@@ -13,12 +13,14 @@
                 <input type="hidden" name="qa" value="{{ question_answer_id }}">
             {% endfor %}
             <input type="hidden" name="p" value="{{ profession_id }}">
-            <button type="submit" class="main-form-btn main-form-btn-success" name="result" value="success">
+            <button type="submit" class="main-form-btn main-form-btn-success voice_button" name="result" value="success"
+                    voice_data="да|угадал">
             <span>
                 УГАДАЛ!
             </span>
             </button>
-            <button type="submit" class="main-form-btn" name="result" value="fail">
+            <button type="submit" class="main-form-btn voice_button" name="result" value="fail"
+                    voice_data="нет|не угадал">
             <span>
                 NOPE
             </span>
@@ -29,6 +31,8 @@
 
 {% block javascript_code %}
     <script>
-        speakText('{{ final_text }}', 0);
+        speakText('{{ final_text }}', 2500).then(function (value) {
+            listenVoice();
+        });
     </script>
 {% endblock %}

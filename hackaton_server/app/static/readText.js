@@ -5,12 +5,18 @@ function speakText(text, wait_time) {
         var msg = new SpeechSynthesisUtterance(text);
         var voices = window.speechSynthesis.getVoices();
         msg.lang = 'ru-RU';
-
+        msg.pitch = 1;
         msg.voice = voices[window.default_voice_id];
         speechSynthesis.speak(msg);
-        window.setTimeout(function () {
+
+        var interval;
+        interval = setInterval(function () {
+            if (speechSynthesis.speaking) {
+                return;
+            }
+            clearInterval(interval);
             dfd.resolve(true);
-        }, wait_time);
+        });
         speechSynthesis.onvoiceschanged = null
     };
     return dfd.promise()
@@ -30,6 +36,10 @@ function listenVoice() {
             })
         }
     });
+    textToButton.sort(function (a, b) {
+        return b.matchString.length - a.matchString.length
+    });
+
     console.log(textToButton);
 
     var recognition = new webkitSpeechRecognition();
@@ -39,15 +49,16 @@ function listenVoice() {
     recognition.start();
 
     recognition.onresult = function (event) {
-        var interim_transcript = '';
+        var speachstate = '';
         for (var i = event.resultIndex; i < event.results.length; ++i) {
-            interim_transcript += event.results[i][0].transcript;
-            console.log(interim_transcript);
+            if (event.results[i].isFinal) {
+                speachstate += event.results[i][0].transcript;
+            }
         }
 
-        var interim_transcript_lower = interim_transcript.toLowerCase()
+        var speachstateLower = speachstate.toLowerCase();
         for (var i = 0; i < textToButton.length; i++) {
-            if (interim_transcript_lower.indexOf(textToButton[i].matchString)) {
+            if (speachstateLower.indexOf(textToButton[i].matchString) != -1) {
                 textToButton[i].button.click()
             }
         }
