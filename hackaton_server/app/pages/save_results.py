@@ -9,6 +9,7 @@ class Page(HackatonPage):
     def get_page(self):
         self.set_template('save_results.html')
 
+
         professions = sorted(self.storage.get_professions(), key=lambda p: p.profession_name)
         self.json.put({
             'professions': professions
