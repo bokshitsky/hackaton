@@ -1,5 +1,4 @@
 {% extends "layout.html" %}
-{% from "read_text.js" import read_text %}
 
 {% block header %}
     <span class="main-form-title">
@@ -9,18 +8,18 @@
 
 {% block content %}
     <form class="main-form" method="post" action="/stage">
-    <div class="container-main-form-btn">
-        <button type="submit" class="main-form-btn">
+        <div class="container-main-form-btn">
+            <button type="submit" class="main-form-btn">
             <span>
                 НАЧАТЬ
             </span>
-        </button>
-    </div>
+            </button>
+        </div>
     </form>
 {% endblock %}
 
 {% block javascript_code %}
     <script>
-        {{ read_text('Скажите своё имя и фамилию и мы начнем.') }}
+        speakText('Давайте начнем', 44, 1000);
     </script>
 {% endblock %}

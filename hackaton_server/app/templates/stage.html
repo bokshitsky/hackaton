@@ -1,5 +1,4 @@
 {% extends "layout.html" %}
-{% from "read_text.js" import read_text %}
 
 {% block header %}
     <span class="main-form-title">
@@ -23,6 +22,6 @@
 
 {% block javascript_code %}
     <script>
-        {{ read_text(question.text) }}
+        speakText('{{ question.text }}', 44, 100);
     </script>
 {% endblock %}
