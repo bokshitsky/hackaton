@@ -33,8 +33,9 @@ function listenVoice() {
             matchString = matchString.replace(/\)/g,"");
             matchString = matchString.replace(/\(/g,"");
             matchString = matchString.replace(/\./g,"");
-            matchString = matchString.replace(/\!/g,"");
-            matchString = matchString.replace(/\:/g,"");
+            matchString = matchString.replace(/!/g,"");
+            matchString = matchString.replace(/:/g,"");
+            matchString = matchString.replace(/\?/g,"");
             matchString = matchString.replace(/ {1,}/g," ");
 
             textToButton.push({

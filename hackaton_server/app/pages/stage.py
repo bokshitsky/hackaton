@@ -58,7 +58,7 @@ class Page(HackatonPage):
                     profession.probability = profession.probability * answer_probability_for_profession
                 self.rescale_professions_weight(professions_snapshot)
 
-                professions_entropy = sum(profession.probability * math.log(profession.probability) for profession in
+                professions_entropy = sum(profession.probability * (-math.log(profession.probability)) for profession in
                                           professions_snapshot)
 
                 question.entropy += professions_entropy * answer.probability
