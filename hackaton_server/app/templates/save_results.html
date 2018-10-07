@@ -25,6 +25,9 @@
 
 {% block javascript_code %}
     <script>
-        listenVoice();
+        speakText('Ну и кто ты?', 2500)
+            .then(function (value) {
+                listenVoice();
+            });
     </script>
 {% endblock %}

@@ -79,7 +79,12 @@ def main():
 def insert_custom(session):
     insert_question_with_answers('Какой язык предпочитаете?', ['java', 'python', 'perl', 'я русский'], session)
     insert_question_with_answers('Что вы продаете?', ['Продукт', 'Себя', 'Не знаю', 'Ничего'], session)
-    insert_question_with_answers('Вы пишете фронтенд?', ['Да', 'К сожалению, да', 'Что это?'], session)
+    insert_question_with_answers('Вы пишете фронтенд?', ['Да', 'К сожалению, да', 'Нет', 'Что это?'], session)
+
+    insert_question_with_answers('Вы преподаёте?', ['Да', 'Нет'], session)
+    insert_question_with_answers('Вы работаете с техникой?', ['Да', 'Нет'], session)
+
+
 
 if __name__ == '__main__':
     main()

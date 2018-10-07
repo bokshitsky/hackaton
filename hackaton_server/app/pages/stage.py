@@ -11,8 +11,15 @@ class Page(HackatonPage):
         next_question_id = int(self.get_argument('nq'))
         next_question = self.storage.get_question(next_question_id)
         next_question_answers = self.storage.get_question_answers(next_question_id)
+
+        if (self.get_argument('debug', None)):
+            professions = self.calculate_professions_probabilities([int(qa) for qa in (self.get_arguments('qa'))])
+        else:
+            professions = []
+
         self.json.put({
             'question': {'text': next_question.question_text},
+            'professions': professions,
             'answers': [{'qa_id': nqa.question_answer_id, 'text': nqa.answer_text} for nqa in next_question_answers]
         })
 
@@ -26,16 +33,19 @@ class Page(HackatonPage):
         professions = self.calculate_professions_probabilities(used_question_answers_ids)
         remaining_question_ids = self.get_remaining_questions_ids(used_question_answers_ids)
         top_profession = professions[0]
-        if not remaining_question_ids or top_profession.probability > 0.8:
+        if not remaining_question_ids or top_profession.probability > 0.80:
             return self.redirect_to_finish(top_profession.profession_id,
                                            last_selected_question_answer,
                                            used_question_answers_ids)
 
-        next_question = self.get_next_question(professions, remaining_question_ids)
+        next_question = self.get_next_question(professions, used_question_answers_ids, remaining_question_ids)
         self.redirect_to_next_stage(next_question, used_question_answers_ids)
 
-    def get_next_question(self, professions, remaining_question_ids):
+    def get_next_question(self, professions, used_question_answers_ids, remaining_question_ids):
         remaining_questions = [self.storage.get_question(question_id) for question_id in remaining_question_ids]
+        if len(used_question_answers_ids) < 2:
+            return random.sample(remaining_questions, 1)[0]
+
         for question in remaining_questions:
             question.entropy = 0
             question_answers = self.storage.get_question_answers(question.question_id)
